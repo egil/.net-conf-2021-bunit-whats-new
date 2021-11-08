@@ -1,0 +1,52 @@
+﻿@page "/fetchdata-sorting"
+
+<PageTitle>Weather forecasts with sorting</PageTitle>
+
+<h1>Sortable weather forecast</h1>
+
+<p>This component demonstrates fetching data from the server.</p>
+
+@if (forecasts == null)
+{
+	<p><em>Loading...</em></p>
+}
+else
+{
+	<table class="table">
+		<thead>
+			<tr>
+				<th>
+					<a class="btn-link" @onclick="() => OnSorting(nameof(WeatherForecast.Date))">
+						Date <span>@GetSortIndicator(nameof(WeatherForecast.Date))</span>
+					</a>
+				</th>
+				<th>
+					<a class="btn-link" @onclick="() => OnSorting(nameof(WeatherForecast.TemperatureC))">
+						Temp. (C) <span>@GetSortIndicator(nameof(WeatherForecast.TemperatureC))</span>
+					</a>
+				</th>
+				<th>
+					<a class="btn-link" @onclick="() => OnSorting(nameof(WeatherForecast.TemperatureF))">
+						Temp. (F) <span>@GetSortIndicator(nameof(WeatherForecast.TemperatureF))</span>
+					</a>
+				</th>
+				<th>
+					<a class="btn-link" @onclick="() => OnSorting(nameof(WeatherForecast.Summary))">
+						Summary <span>@GetSortIndicator(nameof(WeatherForecast.Summary))</span>
+					</a>
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var forecast in forecasts)
+			{
+				<tr>
+					<td>@forecast.Date.ToShortDateString()</td>
+					<td>@forecast.TemperatureC</td>
+					<td>@forecast.TemperatureF</td>
+					<td>@forecast.Summary</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+}

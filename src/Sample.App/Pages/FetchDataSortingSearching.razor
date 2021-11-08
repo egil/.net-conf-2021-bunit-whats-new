@@ -1,0 +1,88 @@
+﻿@page "/fetchdata-sorting-search"
+
+<PageTitle>Weather forecasts with sorting and searching</PageTitle>
+
+<h1>Sort- and searchable fetch data</h1>
+
+<p>This component demonstrates fetching data from the server.</p>
+
+@if (forecasts == null)
+{
+	<p><em>Loading...</em></p>
+}
+else
+{
+	<form>
+		<div class="form-group">
+			<label for="columnFilter">Select columns to display:</label>
+			<select id="columnFilter" @bind="filterColumns" multiple>
+				<option value="@nameof(WeatherForecast.Date)">Date</option>
+				<option value="@nameof(WeatherForecast.TemperatureC)">Temp. (C)</option>
+				<option value="@nameof(WeatherForecast.TemperatureF)">Temp. (F)</option>
+				<option value="@nameof(WeatherForecast.Summary)">Summary</option>
+			</select>
+		</div>
+	</form>
+	<table class="table">
+		<thead>
+			<tr>
+				@if (filterColumns.Contains(nameof(WeatherForecast.Date)))
+				{
+					<th>
+						<a class="btn-link" @onclick="() => OnSorting(nameof(WeatherForecast.Date))">
+							Date <span>@GetSortIndicator(nameof(WeatherForecast.Date))</span>
+						</a>
+					</th>
+				}
+				@if (filterColumns.Contains(nameof(WeatherForecast.TemperatureC)))
+				{
+					<th>
+						<a class="btn-link" @onclick="() => OnSorting(nameof(WeatherForecast.TemperatureC))">
+							Temp. (C) <span>@GetSortIndicator(nameof(WeatherForecast.TemperatureC))</span>
+						</a>
+					</th>
+				}
+				@if (filterColumns.Contains(nameof(WeatherForecast.TemperatureF)))
+				{
+					<th>
+						<a class="btn-link" @onclick="() => OnSorting(nameof(WeatherForecast.TemperatureF))">
+							Temp. (F) <span>@GetSortIndicator(nameof(WeatherForecast.TemperatureF))</span>
+						</a>
+					</th>
+				}
+				@if (filterColumns.Contains(nameof(WeatherForecast.Summary)))
+				{
+					<th>
+						<a class="btn-link" @onclick="() => OnSorting(nameof(WeatherForecast.Summary))">
+							Summary <span>@GetSortIndicator(nameof(WeatherForecast.Summary))</span>
+						</a>
+
+					</th>
+				}
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var forecast in forecasts)
+			{
+				<tr>
+					@if (filterColumns.Contains(nameof(WeatherForecast.Date)))
+					{
+						<td>@forecast.Date.ToShortDateString()</td>
+					}
+					@if (filterColumns.Contains(nameof(WeatherForecast.TemperatureC)))
+					{
+						<td>@forecast.TemperatureC</td>
+					}
+					@if (filterColumns.Contains(nameof(WeatherForecast.TemperatureF)))
+					{
+						<td>@forecast.TemperatureF</td>
+					}
+					@if (filterColumns.Contains(nameof(WeatherForecast.Summary)))
+					{
+						<td>@forecast.Summary</td>
+					}
+				</tr>
+			}
+		</tbody>
+	</table>
+}

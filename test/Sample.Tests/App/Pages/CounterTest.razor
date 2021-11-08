@@ -1,0 +1,29 @@
+﻿@using System.Text.Json
+@inherits TestContext
+@code 
+{
+	[Fact]
+	public void CounterShouldIncrementWhenClicked()
+	{
+		// Arrange: render the Counter.razor component
+		var cut = Render(@<Counter />);
+
+		// Act: find and click the <button> element to increment
+		// the counter in the <p> element
+		cut.Find("button").Click();
+
+		// Assert: first find the <p> element, then verify its content
+		cut.Find("p").MarkupMatches(@<p role="status">Current count: 1</p>
+	);
+	}
+
+	[Fact]
+	public async Task ReadJson()
+	{
+		using var fileStream = File.OpenRead(@"C:\Users\egil\Downloads\weather_data.json");
+		var doc = await JsonDocument.ParseAsync(fileStream);
+		var elms = doc.RootElement.GetProperty("data").EnumerateArray().ToArray();
+
+		Assert.NotEmpty(elms);
+	}
+}
