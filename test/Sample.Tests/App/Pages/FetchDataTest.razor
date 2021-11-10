@@ -1,0 +1,46 @@
+﻿@inherits TestContext
+@code {
+    [Fact]
+    public void Renders_weather_data_in_table()
+    {
+        // Arrange
+        Services.AddSingleton<IWeatherDataService, TestWeatherDataService>();
+
+        // Act
+        IRenderedFragment cut = Render(@<FetchData />);
+
+        // Assert
+        IReadOnlyList<IElement> rows = cut.FindAll("tbody tr");
+        Assert.Equal(3, rows.Count);
+    }
+
+    [Fact]
+    public void Pass_expected_value_to_PageTitle()
+    {
+        // Arrange
+        Services.AddSingleton<IWeatherDataService, TestWeatherDataService>();
+
+        // Act
+        IRenderedFragment cut = Render(@<FetchData />);
+
+        // Assert
+        RenderFragment pageTitleChildContent = cut.FindComponent<PageTitle>().Instance.ChildContent;
+        IRenderedFragment pageTitle = Render(pageTitleChildContent);
+        Assert.Equal("Weather forecast", pageTitle.Markup);
+    }
+
+    [Fact]
+    public void Pass_expected_value_to_PageTitle_stubbed()
+    {
+        // Arrange
+        Services.AddSingleton<IWeatherDataService, TestWeatherDataService>();
+        ComponentFactories.AddStub<PageTitle>(ps => @<title>@((RenderFragment)ps["ChildContent"])</title>);
+
+        // Act
+        IRenderedFragment cut = Render(@<FetchData />);
+
+        // Assert
+        IElement titleElm = cut.Find("title");
+        Assert.Equal("Weather forecast", titleElm.TextContent);
+    }
+}

@@ -1,0 +1,22 @@
+﻿@inherits TestContext
+@code {
+	public FetchDataSortingFilteringTest()
+	{
+		Services.AddSingleton<IWeatherDataService, TestWeatherDataService>();
+	}
+
+	[Fact]
+	public void Filters_columns()
+	{
+		// Arrange
+		IRenderedFragment cut = Render(@<FetchDataSortingFiltering />);
+		IElement select = cut.Find("#columnFilter");
+
+		// Act
+		select.Change(new[] { "Date", "Summary" });
+
+		// Assert
+		IReadOnlyList<IElement> columns = cut.FindAll("thead th");
+		Assert.Equal(2, columns.Count);
+	}
+}

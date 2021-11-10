@@ -1,8 +1,8 @@
-﻿@page "/fetchdata-sorting-search"
+﻿@page "/fetchdata-sorting-filter"
 
-<PageTitle>Weather forecasts with sorting and searching</PageTitle>
+<PageTitle>Weather forecasts with sorting and filtering</PageTitle>
 
-<h1>Sort- and searchable fetch data</h1>
+<h1>Sort- and filterable fetch data</h1>
 
 <p>This component demonstrates fetching data from the server.</p>
 
@@ -14,7 +14,7 @@ else
 {
 	<form>
 		<div class="form-group">
-			<label for="columnFilter">Select columns to display:</label>
+			<label for="columnFilter" class="fw-bold align-top">Select columns to display:</label>
 			<select id="columnFilter" @bind="filterColumns" multiple>
 				<option value="@nameof(WeatherForecast.Date)">Date</option>
 				<option value="@nameof(WeatherForecast.TemperatureC)">Temp. (C)</option>

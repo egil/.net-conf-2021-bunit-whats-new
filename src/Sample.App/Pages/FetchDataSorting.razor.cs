@@ -39,16 +39,16 @@ public sealed partial class FetchDataSorting : IDisposable
 		NavigationManager.LocationChanged += NavigationManager_LocationChanged;
         forecasts = await WeatherService.GetForecasts();
         ApplySort();
-    }
+    }   
 
-	public void Dispose() => NavigationManager.LocationChanged -= NavigationManager_LocationChanged;
+    public void Dispose() => NavigationManager.LocationChanged -= NavigationManager_LocationChanged;
 
 	private void NavigationManager_LocationChanged(object? sender, LocationChangedEventArgs e) => ApplySort();
 
 	private string GetSortIndicator(string sortColumn) => sortDir switch
     {
-        SortingDirection.Asc when sortColumn == SortColumn => "⬇️",
-        SortingDirection.Desc when sortColumn == SortColumn => "⬆️",
+        SortingDirection.Asc when sortColumn == SortColumn => "⬆️",
+        SortingDirection.Desc when sortColumn == SortColumn => "⬇️",
         _ => string.Empty
     };
 

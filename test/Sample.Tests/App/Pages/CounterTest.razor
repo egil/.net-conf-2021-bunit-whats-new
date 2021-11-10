@@ -1,29 +1,58 @@
-﻿@using System.Text.Json
-@inherits TestContext
+﻿@inherits TestContext
 @code 
 {
 	[Fact]
-	public void CounterShouldIncrementWhenClicked()
+	public void Counter_should_increment_when_clicked()
 	{
 		// Arrange: render the Counter.razor component
-		var cut = Render(@<Counter />);
+		IRenderedFragment cut = Render(@<Counter />);
 
 		// Act: find and click the <button> element to increment
 		// the counter in the <p> element
-		cut.Find("button").Click();
+		IElement button = cut.Find("button");
+		button.Click();
 
 		// Assert: first find the <p> element, then verify its content
-		cut.Find("p").MarkupMatches(@<p role="status">Current count: 1</p>
-	);
+		IElement paragraph = cut.Find("p");
+		paragraph.MarkupMatches(@<p role="status">Current count: 1</p>);
 	}
 
 	[Fact]
-	public async Task ReadJson()
+	public void Counter_should_increment_Count_on_FancyParagraph()
 	{
-		using var fileStream = File.OpenRead(@"C:\Users\egil\Downloads\weather_data.json");
-		var doc = await JsonDocument.ParseAsync(fileStream);
-		var elms = doc.RootElement.GetProperty("data").EnumerateArray().ToArray();
+		// Arrange
+		ComponentFactories.Add<FancyParagraph, DummyParagraph>();
+		IRenderedFragment cut = Render(@<Counter />);
 
-		Assert.NotEmpty(elms);
+		// Act
+		IElement button = cut.Find("button");
+		button.Click();
+
+		// Assert
+		IRenderedComponent<DummyParagraph> renderedDummyPara = cut.FindComponent<DummyParagraph>();
+		DummyParagraph dummyParagraph = renderedDummyPara.Instance;
+		Assert.Equal(1, dummyParagraph.Count);
+	}
+
+	private class DummyParagraph : ComponentBase
+	{
+		[Parameter] public int Count { get; set; }
+	}
+
+	[Fact]
+	public void Counter_should_increment_Count_on_FancyParagraph_stub()
+	{
+		// Arrange
+		ComponentFactories.AddStub<FancyParagraph>();
+		IRenderedFragment cut = Render(@<Counter />);
+
+		// Act
+		IElement button = cut.Find("button");
+		button.Click();
+
+		// Assert
+		IRenderedComponent<Stub<FancyParagraph>> renderedStubPara = cut.FindComponent<Stub<FancyParagraph>>();
+		Stub<FancyParagraph> stubParagraph = renderedStubPara.Instance;
+		Assert.Equal(1, stubParagraph.Parameters.Get(x => x.Count));
 	}
 }

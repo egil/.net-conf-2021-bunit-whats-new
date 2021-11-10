@@ -1,6 +1,6 @@
 ﻿namespace Sample.App.Pages;
 
-public sealed partial class FetchDataSortingSearching : IDisposable
+public sealed partial class FetchDataSortingFiltering : IDisposable
 {
     private IReadOnlyList<WeatherForecast> forecasts = Array.Empty<WeatherForecast>();
     private string[] filterColumns = new[] { nameof(WeatherForecast.Date), nameof(WeatherForecast.TemperatureC), nameof(WeatherForecast.TemperatureF), nameof(WeatherForecast.Summary) };
@@ -49,8 +49,8 @@ public sealed partial class FetchDataSortingSearching : IDisposable
 
 	private string GetSortIndicator(string sortColumn) => sortDir switch
     {
-        SortingDirection.Asc when sortColumn == SortColumn => "⬇️",
-        SortingDirection.Desc when sortColumn == SortColumn => "⬆️",
+        SortingDirection.Asc when sortColumn == SortColumn => "⬆️",
+        SortingDirection.Desc when sortColumn == SortColumn => "⬇️",
         _ => string.Empty
     };
 

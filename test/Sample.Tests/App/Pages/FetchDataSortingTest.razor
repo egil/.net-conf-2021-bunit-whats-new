@@ -1,0 +1,75 @@
+﻿@inherits TestContext
+@code {
+	public FetchDataSortingTest()
+	{
+		Services.AddSingleton<IWeatherDataService, TestWeatherDataService>();
+	}
+
+	[Fact]
+	public void Sets_sort_indicator_in_thead()
+	{
+		// Arrange and act
+		IRenderedFragment cut = Render(@<FetchDataSorting 
+									       SortColumn="@nameof(WeatherForecast.Summary)"
+							               SortDirection="Desc" />);
+
+		// Assert
+		IElement summary = cut.Find("thead th:nth-child(4)");
+		
+		// Normalize whitespace before assertion with Trim()
+		Assert.Equal("Summary ⬇️", summary.TextContent.Trim());
+
+		// Or, preferably, using MarkupMatches semantically compares
+		// markup or text according to HTML 5 specifications.
+		summary.TextContent.MarkupMatches("Summary ⬇️");
+	}
+
+	[Fact]
+	public void Sorts_rows_by_SortColumn_and_SortDirection()
+	{
+		// Arrange and act
+		IRenderedFragment cut = Render(@<FetchDataSorting 
+									       SortColumn="@nameof(WeatherForecast.Summary)"
+							               SortDirection="Desc" />);
+
+		// Assert
+		IElement summary = cut.Find("tbody tr:first-child td:nth-child(4)");
+		summary.MarkupMatches(@<td>Volcano</td>);
+	}
+
+	[Fact]
+	public void Sorts_rows_after_click_on_column_head()
+	{
+		// Arrange
+		IRenderedFragment cut = Render(@<FetchDataSorting />);
+
+		// Act
+		IElement sortLink = cut.Find("thead th:nth-child(4) a");
+		sortLink.Click(); // Sort by summary ascending
+		sortLink.Click(); // Sort by summary descending
+
+		// Assert
+		IElement summary = cut.Find("tbody tr:first-child td:nth-child(4)");
+		summary.MarkupMatches(@<td>Volcano</td>);
+	}
+
+	[Fact]
+	public void Updates_url_after_sorting()
+	{
+		// Arrange
+		FakeNavigationManager navMan = Services.GetService<FakeNavigationManager>();
+		IRenderedFragment cut = Render(@<FetchDataSorting />);
+
+		// Act
+		cut.Find("thead th:nth-child(4) a").Click(); // Sort by summary ascending
+
+		// Assert
+		string expectedUri = navMan.GetUriWithQueryParameters(new Dictionary<string, object?>
+        {
+            ["sortBy"] = "Summary",
+            ["sortDir"] = "Asc",
+        });
+		
+		Assert.Equal(expectedUri, navMan.History.First().Uri);
+	}
+}

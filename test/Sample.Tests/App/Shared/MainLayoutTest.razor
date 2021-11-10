@@ -1,11 +1,16 @@
 ﻿@inherits TestContext
 @code {    
 	[Fact]
-	public void MainLayoutHandlesErrors()
+	public void MainLayout_handles_errors()
 	{
-		var cut = Render(@<MainLayout><Body><ThrowingComponent /></Body></MainLayout>);
+		// Arrange and act
+		IRenderedFragment cut = Render(@<MainLayout>
+											<Body><ThrowingComponent /></Body>
+										</MainLayout>);
 
-		cut.Find(".my-error").MarkupMatches(
+		// Assert
+		IElement errorDiv = cut.Find(".my-error");
+		errorDiv.MarkupMatches(
 			@<p class="my-error">Something went wrong. Try again in a moment or two!</p>
 		);
 	}
