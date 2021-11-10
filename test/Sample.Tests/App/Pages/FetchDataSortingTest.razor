@@ -34,7 +34,7 @@
 
 		// Assert
 		IElement summary = cut.Find("tbody tr:first-child td:nth-child(4)");
-		summary.MarkupMatches(@<td>Volcano</td>);
+		summary.MarkupMatches(@<td>Freezing</td>);
 	}
 
 	[Fact]
@@ -50,26 +50,25 @@
 
 		// Assert
 		IElement summary = cut.Find("tbody tr:first-child td:nth-child(4)");
-		summary.MarkupMatches(@<td>Volcano</td>);
+		summary.MarkupMatches(@<td>Freezing</td>);
 	}
 
 	[Fact]
 	public void Updates_url_after_sorting()
 	{
 		// Arrange
-		FakeNavigationManager navMan = Services.GetService<FakeNavigationManager>();
-		IRenderedFragment cut = Render(@<FetchDataSorting />);
-
-		// Act
-		cut.Find("thead th:nth-child(4) a").Click(); // Sort by summary ascending
-
-		// Assert
+		FakeNavigationManager navMan = Services.GetRequiredService<FakeNavigationManager>();
 		string expectedUri = navMan.GetUriWithQueryParameters(new Dictionary<string, object?>
         {
             ["sortBy"] = "Summary",
             ["sortDir"] = "Asc",
         });
-		
+		IRenderedFragment cut = Render(@<FetchDataSorting />);
+
+		// Act
+		cut.Find("thead th:nth-child(4) a").Click(); // Sort by summary ascending
+
+		// Assert		
 		Assert.Equal(expectedUri, navMan.History.First().Uri);
 	}
 }

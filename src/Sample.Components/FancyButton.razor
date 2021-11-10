@@ -1,0 +1,18 @@
+﻿<button @oncustomevent="HandleCustomEvent">I'm fancy!</button>
+
+@if(customEventArgs is not null)
+{
+    <ul>
+        <li>@customEventArgs.CustomProperty1</li>
+        <li>@customEventArgs.CustomProperty2</li>
+    </ul>    
+}
+
+@code {
+    private CustomEventArgs? customEventArgs;
+
+    void HandleCustomEvent(CustomEventArgs eventArgs)
+    {
+        customEventArgs = eventArgs;
+    }
+}

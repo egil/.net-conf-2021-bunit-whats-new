@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace Sample.App.Services;
 
-namespace Sample.App.Services
+public interface IWeatherDataService
 {
-    public interface IWeatherDataService
-    {
-        Task<IReadOnlyList<WeatherForecast>> GetForecasts();
-    }
+    Task<IReadOnlyList<WeatherForecast>> GetForecasts();
 }
+

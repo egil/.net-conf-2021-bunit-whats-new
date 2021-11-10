@@ -11,8 +11,14 @@
 
         // Assert
         IReadOnlyList<IElement> rows = cut.FindAll("tbody tr");
-        Assert.Equal(3, rows.Count);
+        Assert.Equal(4, rows.Count);
     }
+
+
+
+
+
+
 
     [Fact]
     public void Pass_expected_value_to_PageTitle()
@@ -24,9 +30,10 @@
         IRenderedFragment cut = Render(@<FetchData />);
 
         // Assert
-        RenderFragment pageTitleChildContent = cut.FindComponent<PageTitle>().Instance.ChildContent;
-        IRenderedFragment pageTitle = Render(pageTitleChildContent);
-        Assert.Equal("Weather forecast", pageTitle.Markup);
+        IRenderedComponent<PageTitle> pageTitleRC = cut.FindComponent<PageTitle>();
+        PageTitle pageTitle = pageTitleRC.Instance;
+        IRenderedFragment pageTitleChildContentOutput = Render(pageTitle.ChildContent);
+        Assert.Equal("Weather forecast", pageTitleChildContentOutput.Markup);
     }
 
     [Fact]
@@ -34,7 +41,9 @@
     {
         // Arrange
         Services.AddSingleton<IWeatherDataService, TestWeatherDataService>();
-        ComponentFactories.AddStub<PageTitle>(ps => @<title>@((RenderFragment)ps["ChildContent"])</title>);
+
+        ComponentFactories.AddStub<PageTitle>(
+            ps => @<title>@((RenderFragment)ps["ChildContent"])</title>);
 
         // Act
         IRenderedFragment cut = Render(@<FetchData />);

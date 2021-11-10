@@ -28,10 +28,11 @@
 		IElement button = cut.Find("button");
 		button.Click();
 
-		// Assert
+		// Assert		
 		IRenderedComponent<DummyParagraph> renderedDummyPara = cut.FindComponent<DummyParagraph>();
 		DummyParagraph dummyParagraph = renderedDummyPara.Instance;
 		Assert.Equal(1, dummyParagraph.Count);
+		Assert.False(cut.HasComponent<FancyParagraph>());
 	}
 
 	private class DummyParagraph : ComponentBase
@@ -51,8 +52,9 @@
 		button.Click();
 
 		// Assert
-		IRenderedComponent<Stub<FancyParagraph>> renderedStubPara = cut.FindComponent<Stub<FancyParagraph>>();
+		IRenderedComponent<Stub<FancyParagraph>> renderedStubPara 
+			= cut.FindComponent<Stub<FancyParagraph>>();
 		Stub<FancyParagraph> stubParagraph = renderedStubPara.Instance;
-		Assert.Equal(1, stubParagraph.Parameters.Get(x => x.Count));
+		Assert.Equal(1, stubParagraph.Parameters["Count"]);
 	}
 }

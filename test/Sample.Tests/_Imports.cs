@@ -5,3 +5,6 @@ global using Microsoft.AspNetCore.Components.Routing;
 global using Sample.App;
 global using Sample.App.Shared;
 global using Sample.App.Services;
+global using AngleSharp.Dom;
+global using Bunit;
+global using Xunit;

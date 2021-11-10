@@ -1,0 +1,25 @@
+﻿@inherits TestContext
+@code {
+	[Fact]
+	public void Can_raise_custom_event()
+	{
+		// Arrange
+		CustomEventArgs args = new CustomEventArgs
+		{
+			CustomProperty1 = "foo",
+			CustomProperty2 = "bar"
+		};
+		IRenderedFragment cut = Render(@<FancyButton />);
+
+		// Act
+		IElement button = cut.Find("button");
+		button.TriggerEvent("oncustomevent", args);
+
+		// Assert
+		cut.Find("ul").MarkupMatches(
+			@<ul>
+				<li>@args.CustomProperty1</li>
+				<li>@args.CustomProperty2</li>
+			 </ul>);
+	}
+}
