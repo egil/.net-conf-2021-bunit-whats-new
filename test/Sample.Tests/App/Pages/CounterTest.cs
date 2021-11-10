@@ -3,7 +3,7 @@
 public class CounterCSharpTest : TestContext
 {
     [Fact]
-	public void Counter_should_increment_when_clicked_csharp()
+	public void Counter_should_increment_when_clicked()
     {
         // Arrange: render the Counter.razor component
         IRenderedFragment cut = RenderComponent<Counter>();
